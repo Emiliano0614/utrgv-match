@@ -1,0 +1,108 @@
+/* 
+  This CSS file is designed to create a sleek and modern login page for our social media app. 
+  It features a dark background with a clean white card in the center, styled with UTRGV's signature orange color for accents. 
+  The layout is user-friendly, ensuring a great experience on desktop 
+*/
+/* Resetting defaults */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #1a1a1a; /* Dark sleek background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Centering everything */
+/* 1. This matches <div className="auth-page-container"> */
+.auth-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* The White Card */
+/* 2. This matches <div className="auth-card"> */
+.auth-card {
+  background-color: white;
+  color: #333;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.auth-card h2 {
+  margin: 0 0 10px 0;
+  color: #F05023; /* UTRGV Orange */
+  font-size: 28px;
+}
+
+.auth-card p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Inputs */
+/* 3. This matches <div className="input-group"> in your JSX */
+.input-group {
+  margin-bottom: 15px; /* Adds space specifically between the rows */
+  text-align: left;    /* Optional: aligns the input boxes to the left */
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #F05023; /* Highlights orange when typing */
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #F05023;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #d4451d;
+  transform: translateY(-2px); /* Tiny lift effect when hovering */
+}
+
+.footer-text {
+  margin-top: 25px;
+  font-size: 14px;
+}
+
+.footer-text a {
+  color: #F05023;
+  text-decoration: none;
+  font-weight: bold;
+}
+.nav-item:hover {
+    background-color: #fff5f2;
+    color: #F05023 !important;
+}
