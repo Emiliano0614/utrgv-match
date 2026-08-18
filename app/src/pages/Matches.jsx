@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import Sidebar from "../components/SidebarH";
+import { API_URL } from '../api';
 
 function Matches (){
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ function Matches (){
     async function getMatches(){
         const storedData = JSON.parse(localStorage.getItem('user'))
         setUser(storedData)
-        const response = await fetch(`http://localhost:3000/matches/${storedData.id}`, {
+        const response = await fetch(`${API_URL}/matches/${storedData.id}`, {
             method: 'GET'
         })
         const data = await response.json()

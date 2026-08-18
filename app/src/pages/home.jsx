@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import Sidebar from "../components/SidebarH"
+import { API_URL } from '../api'
 // useState stores values so they survive across re-renders, instead of
 // resetting every time the component re-renders like a normal variable would.
 // setX(...) updates that value and triggers React to re-render with the new data.
@@ -26,7 +27,7 @@ function Home (){
    async function fetchProfiles(){
     const storeddata = JSON.parse(localStorage.getItem('user'))
     setUser(storeddata)
-    const response = await fetch(`http://localhost:3000/discover/${storeddata.id}`, {
+    const response = await fetch(`${API_URL}/discover/${storeddata.id}`, {
         method: 'GET'
     })
     const data = await response.json()
@@ -43,7 +44,7 @@ useEffect(() => {
     const current = profiles[index]
     const swiper_id = user.id
     const swiped_id = current.id
-    const response = await fetch ("http://localhost:3000/swipe", {
+    const response = await fetch(`${API_URL}/swipe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({swiped_id,swiper_id,liked})

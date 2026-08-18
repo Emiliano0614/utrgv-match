@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { API_URL } from '../api'
 function StudentProfile(){
     const [error, setError] = useState('')
     async function handlesubmit(event){
@@ -10,7 +11,7 @@ function StudentProfile(){
         const storage = localStorage.getItem('user')
         const user = JSON.parse(storage)
         const userId = user.id
-        const response = await fetch('http://localhost:3000/profile/student',{
+        const response = await fetch(`${API_URL}/profile/student`,{
             method: 'POST',
             headers:  { 'Content-Type': 'application/json' },
             body: JSON.stringify({bio,classification,major,userId})

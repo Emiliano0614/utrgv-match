@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { API_URL } from '../api'
 function BusinessProfile (){
     const [error, setError] = useState('')
     async function handlesubmit (event){
@@ -9,7 +10,7 @@ function BusinessProfile (){
         const storage = localStorage.getItem('user')
         const user = JSON.parse(storage)
         const userId = user.id
-        const response = await fetch('http://localhost:3000/profile/business', {
+        const response = await fetch(`${API_URL}/profile/business`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({projectName,industry,needs,userId})

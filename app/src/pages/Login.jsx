@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { API_URL } from '../api'
 function Login(){
     const [error, setError] = useState('')
     async function HandleSubmit(event){
@@ -9,7 +10,7 @@ function Login(){
         setError(' ')
         const email = event.target.email.value
         const password = event.target.password.value
-        const response = await fetch('http://localhost:3000/login' , {
+        const response = await fetch(`${API_URL}/login` , {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }  ,
             body: JSON.stringify({ email, password })

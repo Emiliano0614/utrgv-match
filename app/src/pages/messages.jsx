@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import Sidebar from '../components/SidebarH';
+import { API_URL } from '../api';
 
-const API = 'http://localhost:3000';
+const API = API_URL;
 const POLL_INTERVAL = 3000; // refresh messages every 3 seconds
 
 // useState stores values so they survive across re-renders, instead of
