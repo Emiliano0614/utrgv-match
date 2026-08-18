@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    # spins up a real postgres for the backend to connect to during CI,
+    # same way docker-compose does for local dev
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: utrgv_match
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: ./server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check syntax of all backend files
+        run: |
+          for f in *.js; do
+            node --check "$f"
+          done
+
+      - name: Boot server and smoke test against real postgres
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/utrgv_match
+          PORT: 3000
+        run: |
+          node server.js &
+          SERVER_PID=$!
+
+          # give the server a moment to connect to postgres and create tables
+          for i in $(seq 1 10); do
+            if curl -s -o /dev/null http://localhost:3000/discover/1; then
+              break
+            fi
+            sleep 1
+          done
+
+          # exercise the real register endpoint end-to-end against postgres
+          RESPONSE=$(curl -s -X POST http://localhost:3000/register \
+            -H "Content-Type: application/json" \
+            -d '{"email":"ci-test@utrgv.edu","fullName":"CI Test","phone":"9561112222","password":"pass1234","role":"student"}')
+
+          echo "$RESPONSE"
+          echo "$RESPONSE" | grep -q '"ok":true'
+
+          kill $SERVER_PID
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
