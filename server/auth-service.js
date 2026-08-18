@@ -3,12 +3,12 @@ const {FindStudentProfileByUserId,FindBusinessProfileByUserId,upsertStudentProfi
 const { validateLoginPayload,validateRegistrationPayload } = require("./validation")
 const {preparePasswordForStorage,comparePassword} = require("./password")
 
-function loginUser(db,payload){
+async function loginUser(db,payload){
     const validate = validateLoginPayload(payload)
     if(validate.ok == false){
         return {ok: false, code: validate.code}
     }
-    const result = findUserWithPasswordByEmail(db, payload.email)
+    const result = await findUserWithPasswordByEmail(db, payload.email)
     if(result == null){
         return {
             ok:false,
@@ -22,10 +22,10 @@ function loginUser(db,payload){
     }
      let profile
     if(account.role == "student"){
-         profile = FindStudentProfileByUserId(db,account.id)
+         profile = await FindStudentProfileByUserId(db,account.id)
     }
     else if (account.role == "business"){
-         profile = FindBusinessProfileByUserId(db,account.id)
+         profile = await FindBusinessProfileByUserId(db,account.id)
     }
     if (profile == null){
         profile = {}
@@ -39,14 +39,14 @@ function loginUser(db,payload){
     }
 }
 
-function registerUser(db,payload){
+async function registerUser(db,payload){
     const validate = validateRegistrationPayload(payload)
     if(validate.ok == false){
          return {ok: false, code: validate.code}
     }
     // the 3 dotd spread all fields from payload into a new object
 // then overwrite the password with the hashed version
-    const user = createUser(db, { ...payload, password: preparePasswordForStorage(payload.password) })
+    const user = await createUser(db, { ...payload, password: preparePasswordForStorage(payload.password) })
     return user
 }
 
